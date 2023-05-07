@@ -18,10 +18,13 @@
 |
 */
 
+import { HttpContext } from '@adonisjs/core/build/standalone'
 import Route from '@ioc:Adonis/Core/Route'
 
-import 'App/Modules/Auth/routes'
+import 'App/Modules/Auth'
+import 'App/Modules/Users'
+import 'App/Modules/Notes'
 
-Route.get('/', async () => {
-  return { hello: 'world' }
+Route.get('/', async ({ response }: HttpContext) => {
+  return response.ok('Index')
 })

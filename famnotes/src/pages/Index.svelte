@@ -29,5 +29,7 @@
       <Route path="/notes" component={Notes} />
       <Route path="/profile" component={Profile} />
     </ProtectedRoute>
+
+    <Route path="*">404</Route>
   </Router>
 </div>
