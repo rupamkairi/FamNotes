@@ -6,6 +6,7 @@
  */
 
 import Bouncer from '@ioc:Adonis/Addons/Bouncer'
+import Note from 'App/Models/Note'
 import User from 'App/Models/User'
 
 /*
@@ -30,9 +31,19 @@ import User from 'App/Models/User'
 | NOTE: Always export the "actions" const from this file
 |****************************************************************
 */
-export const { actions } = Bouncer.define('authorized', (user: User) => {
-  return !!user.id
+
+export const { actions } = Bouncer.before((user: User) => {
+  console.log('Bouncer before', user.id)
 })
+  .define('check:write', (user: User, note: Note) => {
+    if (user.id === note.userId) return true
+    else {
+      return Bouncer.deny('Not Authorized to perform Updats', 403)
+    }
+  })
+  .after((user: User, actionName, actionResult) => {
+    console.log('Bouncer after', user.id, actionName, actionResult)
+  })
 
 /*
 |--------------------------------------------------------------------------
