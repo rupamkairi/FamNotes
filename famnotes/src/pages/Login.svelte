@@ -3,7 +3,7 @@
   import apis from "../apis";
   import request from "../utils/request";
   import routes from "../routes";
-  import { user } from "../store";
+  import { isAuthinticated } from "../store";
 
   const navigate = useNavigate();
 
@@ -18,7 +18,8 @@
       body,
     });
 
-    user.set(true);
+    isAuthinticated.set(true);
+    localStorage.setItem("isAuthinticated", String(true));
     navigate(routes.notes);
   }
 </script>

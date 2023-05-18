@@ -1,6 +1,14 @@
 import { DateTime } from 'luxon'
 import Hash from '@ioc:Adonis/Core/Hash'
-import { column, beforeSave, BaseModel, hasMany, HasMany } from '@ioc:Adonis/Lucid/Orm'
+import {
+  column,
+  beforeSave,
+  BaseModel,
+  hasMany,
+  HasMany,
+  manyToMany,
+  ManyToMany,
+} from '@ioc:Adonis/Lucid/Orm'
 import Note from './Note'
 
 export default class User extends BaseModel {
@@ -18,6 +26,24 @@ export default class User extends BaseModel {
 
   @hasMany(() => Note)
   public notes: HasMany<typeof Note>
+
+  @manyToMany(() => Note, {
+    pivotTable: 'note_viewer_user',
+    localKey: 'id',
+    pivotForeignKey: 'user_id',
+    relatedKey: 'id',
+    pivotRelatedForeignKey: 'note_id',
+  })
+  public viewonlyNotes: ManyToMany<typeof Note>
+
+  @manyToMany(() => Note, {
+    pivotTable: 'note_editor_user',
+    localKey: 'id',
+    pivotForeignKey: 'user_id',
+    relatedKey: 'id',
+    pivotRelatedForeignKey: 'note_id',
+  })
+  public editonlyNotes: ManyToMany<typeof Note>
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime

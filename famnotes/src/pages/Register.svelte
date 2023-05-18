@@ -2,6 +2,7 @@
   import { Link } from "svelte-navigator";
   import apis from "../apis";
   import request from "../utils/request";
+  import { isAuthinticated } from "../store";
 
   let email = "",
     password = "";
@@ -15,6 +16,8 @@
     });
 
     console.log(data);
+    isAuthinticated.set(true);
+    localStorage.setItem("isAuthinticated", String(true));
   }
 </script>
 

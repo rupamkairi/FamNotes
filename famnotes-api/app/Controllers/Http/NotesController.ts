@@ -8,8 +8,12 @@ export default class NotesController {
 
     let notes = await Note.query()
       .where(filter)
-      .preload('user', (usersQuery) => {
-        usersQuery.select('email')
+      .preload('user')
+      .preload('viewonlyUsers', (query) => {
+        query.select('email')
+      })
+      .preload('editonlyUsers', (query) => {
+        query.select('email')
       })
 
     return response.json(notes)
@@ -40,7 +44,9 @@ export default class NotesController {
     let userFilter = {}
     // let userFilter = auth.isAuthenticated ? { user_id: auth.user?.id } : { user_id: null }
     let filter = { id: request.param('id'), ...userFilter }
-    let update = { ...request.only(['title']) }
+    let update = { ...request.only(['title', 'viewer_id']) }
+
+    console.log(update)
 
     let note = await Note.query().where(filter).firstOrFail()
     if (await bouncer.denies('check:write', note))

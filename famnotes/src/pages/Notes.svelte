@@ -20,7 +20,7 @@
 </script>
 
 <div class="h-screen bg-violet-50 overflow-hidden">
-  <div class="flex h-full">
+  <div class="flex h-full sm:gap-2">
     <div class="w-0 sm:w-72 pt-12 max-h-full">
       <div
         class="h-full overflow-y-scroll bg-violet-100 flex flex-col rounded-md shadow shadow-violet-300"
@@ -42,7 +42,7 @@
         {/each}
       </div>
     </div>
-    <div class="grow pt-32 max-h-full overflow-y-scroll">
+    <div class="grow pt-8 sm:pt-32 max-h-full overflow-y-scroll">
       <div class="max-w-lg mx-auto px-2">
         {#if selectedNote}
           <div>

@@ -1,3 +1,8 @@
 import { writable } from "svelte/store";
 
-export const user = writable(true);
+function isAuthinticatedCheck() {
+  const value = localStorage.getItem("isAuthinticated");
+  return value ? Boolean(value) : false;
+}
+
+export const isAuthinticated = writable(isAuthinticatedCheck());
