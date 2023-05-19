@@ -21,7 +21,7 @@ export default class User extends BaseModel {
   @column({ serializeAs: null })
   public password: string
 
-  @column()
+  @column({ serializeAs: null })
   public rememberMeToken: string | null
 
   @hasMany(() => Note)

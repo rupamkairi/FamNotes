@@ -1,14 +1,15 @@
 import BaseSeeder from '@ioc:Adonis/Lucid/Seeder'
+import NoteViewerUser from 'App/Models/NoteViewerUser'
 
 const viewonlyNotesUsersMapping = [
-  { note_id: 1, user_id: 2 },
-  { note_id: 1, user_id: 3 },
-  { note_id: 2, user_id: 1 },
-  { note_id: 3, user_id: 1 },
+  { noteId: 1, userId: 2 },
+  { noteId: 1, userId: 3 },
+  { noteId: 2, userId: 1 },
+  { noteId: 3, userId: 1 },
 ]
 
 export default class extends BaseSeeder {
   public async run() {
-    // viewonly Model Required for seeding
+    await NoteViewerUser.createMany(viewonlyNotesUsersMapping)
   }
 }

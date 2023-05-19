@@ -12,14 +12,22 @@ export default class AuthController {
       password: schema.string({}, [rules.minLength(8)]),
     })
 
-    let data = await request.validate({
+    const data = await request.validate({
       schema: userSchema,
       data: request.only(['email', 'password']),
     })
-    let user = await User.create(data)
-    user = await auth.login(user)
 
-    return response.json(user)
+    // Remember me token funtionality here or in auth middleware...
+    // data['remember_me_token'] = Math.random().toString()
+
+    const user = await User.create(data)
+    const authUser = await auth.login(user)
+
+    const result: User = {
+      ...authUser.toJSON(),
+      remember_me_token: authUser?.rememberMeToken,
+    }
+    return response.json(result)
   }
 
   public async login({ request, response, auth }: HttpContextContract) {
@@ -28,14 +36,19 @@ export default class AuthController {
       password: schema.string({}, [rules.minLength(8)]),
     })
 
-    let data = await request.validate({
+    const data = await request.validate({
       schema: userSchema,
       data: request.only(['email', 'password']),
     })
 
-    let user = await auth.attempt(data.email, data.password)
+    const authUser = await auth.attempt(data.email, data.password)
 
-    return response.json(user)
+    const result: User = {
+      ...authUser.toJSON(),
+      remember_me_token: authUser?.rememberMeToken,
+    }
+
+    return response.json(result)
   }
 
   public async logout({ response, auth }: HttpContextContract) {
