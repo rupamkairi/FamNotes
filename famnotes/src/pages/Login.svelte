@@ -1,11 +1,9 @@
 <script lang="ts">
-  import { Link, useNavigate } from "svelte-navigator";
+  import { Link, navigate } from "svelte-navigator";
   import apis from "../apis";
   import request from "../utils/request";
   import routes from "../routes";
-  import { isAuthinticated } from "../store";
-
-  const navigate = useNavigate();
+  import { isAuthinticated, userState } from "../store";
 
   let email = "rupam@fn.com",
     password = "1234@Pass";
@@ -18,9 +16,13 @@
       body,
     });
 
-    isAuthinticated.set(true);
-    localStorage.setItem("isAuthinticated", String(true));
-    navigate(routes.notes);
+    if (data) {
+      isAuthinticated.set(true);
+      userState.set(data);
+      localStorage.setItem("isAuthinticated", String(true));
+      localStorage.setItem("userId", data.id);
+      navigate(routes.notes);
+    }
   }
 </script>
 

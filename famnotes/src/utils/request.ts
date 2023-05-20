@@ -2,6 +2,7 @@ import axios from "axios";
 import apis from "../apis";
 
 enum ContentTypeEnum {
+  plain = "text/plain",
   json = "application/json",
   formData = "multipart/form-data",
 }
@@ -31,9 +32,22 @@ export default async function request({
       body: method.toUpperCase() === "GET" ? null : JSON.stringify(body),
       credentials: "include",
     });
-    const data = response.json();
-    return data;
 
+    if (response.status >= 400) {
+      console.error("Error Status", response.status, "Error", response.body);
+      return null;
+    }
+
+    let data = null;
+    if (response.headers.get("Content-Type").startsWith(ContentTypeEnum.json)) {
+      data = response.json();
+    } else if (
+      response.headers.get("Content-Type").startsWith(ContentTypeEnum.plain)
+    ) {
+      data = response.text();
+    }
     return data;
-  } catch (error) {}
+  } catch (error) {
+    return null;
+  }
 }
