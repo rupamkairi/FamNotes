@@ -10,6 +10,10 @@ const apis = {
 
   notes: `${api}/notes`,
   note: (id: string | number) => `${api}/notes/${id}`,
+
+  viewers: (id: string | number) => `${api}/notes/${id}/viewers`,
+  viewer: (id: string | number, user_id: string | number) =>
+    `${api}/notes/${id}/viewers/${user_id}`,
 };
 
 export default apis;

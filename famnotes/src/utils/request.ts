@@ -29,11 +29,15 @@ export default async function request({
     const response = await fetch(url + query, {
       method,
       headers,
-      body: method.toUpperCase() === "GET" ? null : JSON.stringify(body),
+      body:
+        method.toUpperCase() === "GET" || method.toUpperCase() === "DELETE"
+          ? null
+          : JSON.stringify(body),
       credentials: "include",
     });
 
     if (response.status >= 400) {
+      console.log(response);
       console.error("Error Status", response.status, "Error", response.body);
       return null;
     }

@@ -61,6 +61,39 @@
     }
   }
 
+  async function submitAddNoteViewer() {
+    const email = prompt("Enter email address of the other user");
+    if (!email) return null;
+
+    let data = await request({
+      url: apis.viewers(selectedNote.id),
+      method: "POST",
+      body: { email },
+    });
+
+    console.log(data);
+  }
+
+  async function submitRemoveNoteViewer(userId: number | string) {
+    const answer = confirm("This will remove this viewer");
+    if (!answer) return null;
+
+    let data = await request({
+      url: apis.viewer(selectedNote.id, userId),
+      method: "DELETE",
+    });
+    // let data = await request({
+    //   url: "http://127.0.0.1:3333/notes/1/viewers/3",
+    //   method: "DELETE",
+    // });
+
+    console.log(data);
+  }
+
+  async function submitAddNoteEditor() {}
+
+  async function submitRemoveNoteEditor() {}
+
   function addNoteItemToNote(item) {
     if (selectedNote) {
       console.log(selectedNote);
@@ -148,6 +181,106 @@
       <div class=" pt-8 sm:pt-32 max-w-lg mx-auto px-2">
         {#if selectedNote}
           <div>
+            <div class="flex gap-4 justify-end text-violet-400">
+              <div>
+                <p class="flex gap-2 text-sm">
+                  <span>Viewers</span>
+                  <button class="text-green-500" on:click={submitAddNoteViewer}>
+                    <svg
+                      class="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                      aria-hidden="true"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M19 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zM4 19.235v-.11a6.375 6.375 0 0112.75 0v.109A12.318 12.318 0 0110.374 21c-2.331 0-4.512-.645-6.374-1.766z"
+                      />
+                    </svg>
+                  </button>
+                </p>
+                {#each selectedNote.viewonlyUsers as viewer}
+                  <div class="flex gap-2 items-center text-xs">
+                    <span>
+                      {viewer.email}
+                    </span>
+                    <button
+                      class="text-red-500"
+                      on:click={async () => {
+                        await submitRemoveNoteViewer(viewer.id);
+                      }}
+                    >
+                      <svg
+                        class="w-3 h-3"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.5"
+                        viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg"
+                        aria-hidden="true"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="M22 10.5h-6m-2.25-4.125a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zM4 19.235v-.11a6.375 6.375 0 0112.75 0v.109A12.318 12.318 0 0110.374 21c-2.331 0-4.512-.645-6.374-1.766z"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                {/each}
+              </div>
+              <div>
+                <p class="flex gap-2 text-sm">
+                  <span>Editors</span>
+                  <button class="text-green-500">
+                    <svg
+                      class="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                      aria-hidden="true"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M19 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zM4 19.235v-.11a6.375 6.375 0 0112.75 0v.109A12.318 12.318 0 0110.374 21c-2.331 0-4.512-.645-6.374-1.766z"
+                      />
+                    </svg>
+                  </button>
+                </p>
+                {#each selectedNote.editonlyUsers as editors}
+                  <div class="flex gap-2 items-center text-xs">
+                    <span>
+                      {editors.email}
+                    </span>
+                    <button class="text-red-500">
+                      <svg
+                        class="w-3 h-3"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.5"
+                        viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg"
+                        aria-hidden="true"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="M22 10.5h-6m-2.25-4.125a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zM4 19.235v-.11a6.375 6.375 0 0112.75 0v.109A12.318 12.318 0 0110.374 21c-2.331 0-4.512-.645-6.374-1.766z"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                {/each}
+              </div>
+            </div>
+
             <h1 class="text-3xl md:text-4xl font-bold mb-8">
               {selectedNote.title}
             </h1>
