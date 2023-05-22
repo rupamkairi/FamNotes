@@ -35,10 +35,10 @@ import User from 'App/Models/User'
 export const { actions } = Bouncer.before((user: User) => {
   console.log('Bouncer before', user.id)
 })
-  .define('check:write', (user: User, note: Note) => {
-    if (user.id === note.userId) return true
+  .define('check:write', (user: User, note: Note | null) => {
+    if (user.id === note?.userId) return true
     else {
-      return Bouncer.deny('Not Authorized to perform Updats', 403)
+      return Bouncer.deny('Not Authorized to perform this action', 403)
     }
   })
   .after((user: User, actionName, actionResult) => {

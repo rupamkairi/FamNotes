@@ -90,6 +90,8 @@ export default class NotesController {
 
     let note = await Note.query().where(filter).first()
 
+    // if (note_id, auth_user) combination not match - the user didn't created this
+    // so find this wheather this user added as editor to the note
     if (!note) {
       let filter = { note_id: +request.param('id'), ...userFilter }
       let editNote = await NoteEditorUser.query().where(filter).preload('note').first()
